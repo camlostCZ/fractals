@@ -7,7 +7,7 @@ class SierpinskiTriangle(Fractal):
         (0.5, 0, 0, 0.5, 1, 50),
         (0.5, 0, 0, 0.5, 50, 50)
     ]
-
+    
 
     def __init__(self) -> None:
         self.name = "SierpinskiTriangle"
@@ -31,7 +31,7 @@ class SierpinskiTriangle(Fractal):
         """
         idx_ifs = 2
         if pct <= 33:
-            idx_ifx = 0
+            idx_ifs = 0
         elif pct <= 66:
             idx_ifs = 1
 
