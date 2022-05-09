@@ -1,3 +1,6 @@
+# Usage:   fct.py (tree|triangle) (generate|discretise|encode|visualise)
+# Example: fct.py tree generate 4000
+
 """
 fct.py
 
@@ -19,33 +22,23 @@ from fractal import Fractal
 from sierpinski import SierpinskiTriangle
 from tree import FractalTree
 
-
-NUM_MIN = 2500  # Min. number of points generated (inclusive)
-NUM_MAX = 6400  # Max. number of points generated (inclusive)
+FRACTAL_MAP = {
+    "tree": FractalTree,
+    "triangle": SierpinskiTriangle
+}
 
 
 def help() -> str:
     return """
     Usage:
-        fct.py (tree|triangle) <action> <filename>
+        fct.py (tree|triangle) <action>
+
+            action:
+                - generate <number>           Generate fractal points
+                - discretise <number> <bins>  Discretize fractal points
+                - encode                      Encode points previously saved to a file
+                - visualise                   Visualise previously saved points
     """
-
-
-def discretise(fractal_points, m: int):
-    num = len(fractal_points)
-    if m not in range(num // 100, math.sqrt(num)):
-        # Terminate function and signal an error state
-        raise ValueError(f"Invalid value for 'm' {m}")
-
-    # 'm' has a correct value here
-    # Find a distribution frequency of points
-    x_coords = []
-    y_coords = []
-    for each_point in fractal_points:
-        x_coords.append(each_point[0])
-        y_coords.append(each_point[1])
-    result = np.histogram2d(x_coords, y_coords, bins=m, density=False)
-    return result
 
 
 def load_points(filename: str) -> list[tuple[float, float]]:
@@ -71,22 +64,6 @@ def load_points(filename: str) -> list[tuple[float, float]]:
                 points.append((x, y))
     return points
     
-
-def generate(fract: Fractal, num: int) -> None:
-    # Raise an exception in case of an invalid value
-    if num not in range(NUM_MIN, NUM_MAX + 1):
-        # Terminate function and signal an error state
-        raise ValueError(
-            f"Number of points has to be in the interval <{NUM_MIN}, {NUM_MAX}>"
-        )
-    
-    points = fract.generate_points(num, 0.0, 0.0)
-    filename = f"{fract.name}_{num}.txt"
-    with open(filename, "w") as f:
-        for each_point in points:
-            x, y = each_point
-            f.write(f"{x},{y}\n")
-
 
 def visualise(filename: str) -> None:
     points = load_points(filename)
@@ -119,23 +96,31 @@ def encode(filename: str) -> None:
 
 def main() -> None:
     print("Fractals")
-    match sys.argv:
-        case [_, "tree", action, filename]:
-            print(f"called {action} with {filename}")
-            fr = FractalTree()
-            pass
-        case [_, "triangle", action, filename]:
-            print(f"called {action} with {filename}")
-            fr = SierpinskiTriangle()
-            pass
-        case _:
-            print("Error: Invalid arguments. \n")
-            print(help())
-            return
+    try:
+        match sys.argv:
+            case [_, fractal, "generate", number] if number.isdecimal():
+                fr = FRACTAL_MAP[fractal]()
+                fr.generate(int(number))
+            case [_, fractal, "discretise", number, bins] if number.isdecimal() and bins.isdecimal():
+                fr = FRACTAL_MAP[fractal]()
+                points = fr.generate(int(number))
+                fr.discretise(points, int(bins))
+            case [_, fractal, "encode"]:
+                fr = FRACTAL_MAP[fractal]()
+            case [_, fractal, "visualise"]:
+                fr = FRACTAL_MAP[fractal]()
+            case _:
+                print("Error: Invalid arguments. \n")
+                print(help())
+    except KeyError:
+        print("Error: Invalid fractal name used.\n", file=sys.stderr)
+        print(help())
+    except ValueError as e:
+        print(e, file=sys.stderr)
 
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("Interrupted by user.")
+        print("Interrupted by user.", file=sys.stderr)
