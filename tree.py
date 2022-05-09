@@ -15,12 +15,27 @@ class FractalTree(Fractal):
 
 
     def transformation(self, pct, point):
+        """
+        Compute coordinates of next point based on current 'point'
+        and the probability distribution 'pct'.
+
+        Note:
+            This general implementation does nothing important.
+            Should be overridden in class children.
+
+        Args:
+            pct (int): Probability distribution in percents (0 - 100)
+            point (tuple(float, float)): Point coordinates
+
+        Returns:
+            tuple(float, float, int): Coordinates and index of transformation used
+        """
         idx_ifs = 3
         if pct <= 5:
             idx_ifs = 0
-        elif pct <= 0.45:
+        elif pct <= 45:
             idx_ifs = 1
-        elif pct <= 0.85:
+        elif pct <= 85:
             idx_ifs = 2
 
         a, b, c, d, e, f = FractalTree.IFS_ARGS[idx_ifs]
