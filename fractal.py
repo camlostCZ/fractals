@@ -105,7 +105,7 @@ class Fractal:
 
         # 'm' has a correct value here
         # Find a distribution frequency of points
-        x_coords, y_coords = zip(*fractal_points)
+        x_coords, y_coords, method = zip(*fractal_points)
         result,xedges, yedges = np.histogram2d(x_coords, y_coords, bins=m, 
             density=False)
 
