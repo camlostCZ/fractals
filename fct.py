@@ -17,7 +17,6 @@ import sys
 
 import matplotlib.pyplot as plt
 
-from fractal import Fractal
 from sierpinski import SierpinskiTriangle
 from tree import FractalTree
 
