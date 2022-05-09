@@ -55,6 +55,18 @@ class Fractal:
 
 
     def generate(self, num: int) -> list[tuple[float, float, int]]:
+        """
+        Generate a list of fractal points and save them to a file.
+
+        Args:
+            num (int): Number of points
+
+        Raises:
+            ValueError: In case of invalid number of points.
+
+        Returns:
+            list[tuple[float, float, int]]: List of points and method used to generate them
+        """
         # Raise an exception in case of an invalid value
         if num not in range(NUM_MIN, NUM_MAX + 1):
             # Terminate function and signal an error state
@@ -93,11 +105,7 @@ class Fractal:
 
         # 'm' has a correct value here
         # Find a distribution frequency of points
-        x_coords = []
-        y_coords = []
-        for each_point in fractal_points:
-            x_coords.append(each_point[0])
-            y_coords.append(each_point[1])
+        x_coords, y_coords = zip(*fractal_points)
         result,xedges, yedges = np.histogram2d(x_coords, y_coords, bins=m, 
             density=False)
 
