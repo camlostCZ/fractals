@@ -10,6 +10,10 @@ class FractalTree(Fractal):
     ]
 
 
+    def __init__(self) -> None:
+        self.name = "FractalTree"
+
+
     def transformation(self, pct, point):
         idx_ifs = 3
         if pct <= 5:

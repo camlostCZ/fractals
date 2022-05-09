@@ -9,6 +9,10 @@ class SierpinskiTriangle(Fractal):
     ]
 
 
+    def __init__(self) -> None:
+        self.name = "SierpinskiTriangle"
+
+
     def transformation(self, pct, point):
         idx_ifs = 2
         if pct <= 33:
