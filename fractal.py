@@ -80,6 +80,7 @@ class Fractal:
             for each_point in points:
                 x, y, _ = each_point
                 f.write(f"{x},{y}\n")
+        print("Fractal data saved to {filename}.")
         return points
 
 
@@ -114,4 +115,5 @@ class Fractal:
             for row in result:
                 line = ",".join([str(int(x)) for x in row])
                 f.write(f"{line}\n")
+        print("Fractal data saved to {filename}.")
         return result

@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 from sierpinski import SierpinskiTriangle
 from tree import FractalTree
 
+# Cmdline argument translation map
 FRACTAL_MAP = {
     "tree": FractalTree,
     "triangle": SierpinskiTriangle
@@ -102,11 +103,13 @@ def encode(filename: str) -> None:
                 ch = " " if item == "0" else "X"
                 output_line += ch
             fw.write(output_line + "\n")
+    print("Fractal data saved to {output_filename}.")
 
 
 def main() -> None:
     print("Fractals")
     try:
+        # Simple command line parser
         match sys.argv:
             case [_, fractal, "generate", number] if number.isdecimal():
                 fr = FRACTAL_MAP[fractal]()
