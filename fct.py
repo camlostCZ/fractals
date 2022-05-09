@@ -79,7 +79,7 @@ def visualise(filename: str) -> None:
     plt.plot(x, y, "b.")
     img_filename = re.sub(r"\.[^.]+$", ".png", filename)
     plt.savefig(fname=img_filename, format="png")
-    print(f"Fractal saved to {filename}.")
+    print(f"Fractal saved to {img_filename}.")
 
 
 def encode(filename: str) -> None:
