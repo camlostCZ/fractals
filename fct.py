@@ -36,7 +36,7 @@ def help() -> str:
             action:
                 - generate <number>           Generate fractal points
                 - discretise <number> <bins>  Discretize fractal points
-                - encode                      Encode points previously saved to a file
+                - encode <filename>           Encode points previously saved to a file
                 - visualise                   Visualise previously saved points
     """
 
@@ -77,12 +77,12 @@ def encode(filename: str) -> None:
     and all other values with "X" (creating some ASCII art fractal
     image).
     Save the result to file named "*_encoded.txt" 
-    ("sample.txt" -> "sample_encoded.txt").
+    ("sample_discret.txt" -> "sample_encoded.txt").
 
     Args:
         filename (str): Source file name
     """
-    output_filename = re.sub(r"\.[^.]+$", "_encoded.txt", filename)
+    output_filename = re.sub(r"_discret\.[^.]+$", "_encoded.txt", filename)
     with open(output_filename, "w") as fw, open(filename) as fr:
         for each_line in fr:
             row = each_line.split(',')
@@ -105,8 +105,8 @@ def main() -> None:
                 fr = FRACTAL_MAP[fractal]()
                 points = fr.generate(int(number))
                 fr.discretise(points, int(bins))
-            case [_, fractal, "encode"]:
-                fr = FRACTAL_MAP[fractal]()
+            case [_, fractal, "encode", filename]:
+                encode(filename)
             case [_, fractal, "visualise"]:
                 fr = FRACTAL_MAP[fractal]()
             case _:
