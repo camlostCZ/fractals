@@ -14,6 +14,21 @@ class SierpinskiTriangle(Fractal):
 
 
     def transformation(self, pct, point):
+        """
+        Compute coordinates of next point based on current 'point'
+        and the probability distribution 'pct'.
+
+        Note:
+            This general implementation does nothing important.
+            Should be overridden in class children.
+
+        Args:
+            pct (int): Probability distribution in percents (0 - 100)
+            point (tuple(float, float)): Point coordinates
+
+        Returns:
+            tuple(float, float, int): Coordinates and index of transformation used
+        """
         idx_ifs = 2
         if pct <= 33:
             idx_ifx = 0
