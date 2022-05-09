@@ -1,5 +1,5 @@
-# Usage:   fct.py (tree|triangle) (generate|discretise|encode|visualise)
 # Example: fct.py tree generate 4000
+# Usage:   See help() bellow
 
 """
 fct.py
@@ -12,11 +12,10 @@ See help() for usage (or run the tool without any arguments).
 Requires: Python 3.10+ ('match case' feature)
 """
 
-import math
 import re
 import sys
 
-import numpy as np
+import matplotlib.pyplot as plt
 
 from fractal import Fractal
 from sierpinski import SierpinskiTriangle
@@ -36,8 +35,10 @@ def help() -> str:
             action:
                 - generate <number>           Generate fractal points
                 - discretise <number> <bins>  Discretize fractal points
-                - encode <filename>           Encode points previously saved to a file
-                - visualise                   Visualise previously saved points
+
+    ... or:
+        fct.py encode <filename>              Encode points previously saved to a file
+        fct.py visualise <filename>           Visualise previously saved points
     """
 
 
@@ -66,9 +67,19 @@ def load_points(filename: str) -> list[tuple[float, float]]:
     
 
 def visualise(filename: str) -> None:
+    """
+    Plot visual representation of a previously saved fractal
+    and save it as a PNG file.
+
+    Args:
+        filename (str): Filename with generated points.
+    """
     points = load_points(filename)
+    x, y = zip(*points)
+    plt.plot(x, y, "b.")
     img_filename = re.sub(r"\.[^.]+$", ".png", filename)
-    # TODO Draw a fractal using matplotlib.pyplot.scatter()
+    plt.savefig(fname=img_filename, format="png")
+    print(f"Fractal saved to {filename}.")
 
 
 def encode(filename: str) -> None:
@@ -105,16 +116,18 @@ def main() -> None:
                 fr = FRACTAL_MAP[fractal]()
                 points = fr.generate(int(number))
                 fr.discretise(points, int(bins))
-            case [_, fractal, "encode", filename]:
+            case [_, "encode", filename]:
                 encode(filename)
-            case [_, fractal, "visualise"]:
-                fr = FRACTAL_MAP[fractal]()
+            case [_, "visualise", filename]:
+                visualise(filename)
             case _:
-                print("Error: Invalid arguments. \n")
+                print("Error: Invalid arguments.\n")
                 print(help())
     except KeyError:
         print("Error: Invalid fractal name used.\n", file=sys.stderr)
         print(help())
+    except FileNotFoundError as e:
+        print(e, file=sys.stderr)
     except ValueError as e:
         print(e, file=sys.stderr)
 
