@@ -111,10 +111,15 @@ def main() -> None:
     try:
         # Simple command line parser
         match sys.argv:
-            case [_, fractal, "generate", number] if number.isdecimal():
+            case [_, fractal, "generate", number] if (
+                number.isdecimal() 
+                and fractal in FRACTAL_MAP.keys()):
                 fr = FRACTAL_MAP[fractal]()
                 fr.generate(int(number))
-            case [_, fractal, "discretise", number, bins] if number.isdecimal() and bins.isdecimal():
+            case [_, fractal, "discretise", number, bins] if (
+                number.isdecimal() 
+                and bins.isdecimal() 
+                and fractal in FRACTAL_MAP.keys()):
                 fr = FRACTAL_MAP[fractal]()
                 points = fr.generate(int(number))
                 fr.discretise(points, int(bins))
